@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\UserRegistered;
-use App\Mail\WelcomeMail;
+use App\Mail\WelcomeNewUser;
 use Illuminate\Support\Facades\Mail;
 
 class SendWelcomeEmail
@@ -21,6 +21,6 @@ class SendWelcomeEmail
      */
     public function handle(UserRegistered $event): void
     {
-        //Mail::to($event->user->email)->send(new WelcomeMailBoss($event->user));
+        Mail::to($event->user->email)->send(new WelcomeNewUser($event->user));
     }
 }

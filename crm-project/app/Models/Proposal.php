@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Proposal extends Model
 {
     use HasFactory;
+    protected $fillable = ['customer_id', 'title', 'description', 'value', 'status'];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 }

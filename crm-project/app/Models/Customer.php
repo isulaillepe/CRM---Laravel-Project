@@ -15,4 +15,12 @@ class Customer extends Model
         'phone',
         'status',
     ];
+
+    /**
+     * Get all of the proposals for the customer.
+     */
+    public function proposals()
+    {
+        return $this->hasMany(Proposal::class);
+    }
 }

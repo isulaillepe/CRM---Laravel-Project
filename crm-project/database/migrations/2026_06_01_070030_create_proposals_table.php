@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('proposals', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('customer_id')->constrained()->onDelete('cascade');
+            $table->string('title');
+            $table->text('description');
+            $table->decimal('value', 10, 2); // Handles deal valuations up to $99,999,999.99
+            $table->string('status')->default('draft'); // draft, sent, accepted, declined
             $table->timestamps();
         });
     }
