@@ -43,4 +43,11 @@ class ProposalController extends Controller
 
         return redirect()->route('proposals.index');
     }
+
+    public function destroy(Proposal $proposal)
+    {
+        $proposal->delete();
+
+        return redirect()->route('proposals.index');
+    }
 }
