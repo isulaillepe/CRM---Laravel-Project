@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('customer_id')->constrained()->onDelete('cascade');
             $table->string('invoice_number')->unique();
             $table->decimal('amount', 10, 2);
-            $table->string('status')->default('unpaid'); // unpaid, paid, overdue
+            $table->string('status')->default('unpaid');
+            $table->date('due_date'); 
             $table->timestamps();
         });
     }

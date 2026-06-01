@@ -25,11 +25,15 @@ const form = useForm({
     customer_id: '',
     invoice_number: '',
     amount: '',
-    status: 'unpaid'
+    status: 'unpaid',
+    due_date: ''
 });
 
 onMounted(() => {
     form.invoice_number = generateInvoiceNumber();
+    const future = new Date();
+    future.setDate(future.getDate() + 30);
+    form.due_date = future.toISOString().slice(0, 10);
 });
 
 const submit = () => {
@@ -148,6 +152,18 @@ const submit = () => {
                                 </select>
                                 <div v-if="form.errors.status" class="text-rose-500 text-xs mt-1 font-medium">{{ form.errors.status }}</div>
                             </div>
+                        </div>
+
+                        <!-- Due Date -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500">Due Date</label>
+                            <input 
+                                v-model="form.due_date" 
+                                type="date" 
+                                required
+                                class="mt-2 block w-full rounded-xl border-gray-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5 transition duration-150"
+                            />
+                            <div v-if="form.errors.due_date" class="text-rose-500 text-xs mt-1 font-medium">{{ form.errors.due_date }}</div>
                         </div>
 
                         <!-- Action Buttons -->

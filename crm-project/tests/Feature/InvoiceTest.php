@@ -57,6 +57,7 @@ class InvoiceTest extends TestCase
                 'invoice_number' => 'INV-20260601-9999',
                 'amount' => 1500.75,
                 'status' => 'unpaid',
+                'due_date' => '2026-06-30',
             ]);
 
         $response->assertSessionHasNoErrors();
@@ -67,6 +68,7 @@ class InvoiceTest extends TestCase
             'invoice_number' => 'INV-20260601-9999',
             'amount' => 1500.75,
             'status' => 'unpaid',
+            'due_date' => '2026-06-30',
         ]);
     }
 
@@ -85,6 +87,7 @@ class InvoiceTest extends TestCase
             'invoice_number' => 'INV-TEMP-1111',
             'amount' => 200.00,
             'status' => 'unpaid',
+            'due_date' => '2026-06-30',
         ]);
 
         $response = $this

@@ -40,6 +40,7 @@ class InvoiceController extends Controller
             'invoice_number' => 'required|string|max:255|unique:invoices,invoice_number',
             'amount' => 'required|numeric|min:0',
             'status' => 'required|string|in:unpaid,paid,overdue',
+            'due_date' => 'required|date',
         ]);
 
         Invoice::create($validated);
