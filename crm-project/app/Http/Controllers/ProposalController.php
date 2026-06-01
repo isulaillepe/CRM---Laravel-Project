@@ -31,6 +31,11 @@ class ProposalController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge([
+            'title' => strip_tags(trim($request->input('title'))),
+            'description' => strip_tags(trim($request->input('description'))),
+        ]);
+
         $validated = $request->validate([
             'customer_id' => 'required|exists:customers,id',
             'title' => 'required|string|max:255',

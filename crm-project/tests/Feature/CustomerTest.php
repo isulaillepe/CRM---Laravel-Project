@@ -35,9 +35,9 @@ class CustomerTest extends TestCase
         $response = $this
             ->actingAs($user)
             ->post(route('customers.store'), [
-                'name' => 'John Doe',
-                'email' => 'john@example.com',
-                'phone' => '+15551234567',
+                'name' => 'Warnakulasuriya Patabendige Ushantha Joseph Chaminda Vaas',
+                'email' => 'Chaminda@example.com',
+                'phone' => '+94712345678',
                 'status' => 'active',
             ]);
 
@@ -45,9 +45,32 @@ class CustomerTest extends TestCase
         $response->assertRedirect(route('customers.index'));
 
         $this->assertDatabaseHas('customers', [
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
-            'phone' => '+15551234567',
+            'name' => 'Warnakulasuriya Patabendige Ushantha Joseph Chaminda Vaas',
+            'email' => 'Chaminda@example.com',
+            'phone' => '+94712345678',
+            'status' => 'active',
+        ]);
+    }
+
+    public function test_customer_inputs_are_sanitized(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->post(route('customers.store'), [
+                'name' => '<b>HTML Stripped</b>',
+                'email' => '  dirty_email@example.com  ',
+                'phone' => '<i>+1234567</i>',
+                'status' => 'active',
+            ]);
+
+        $response->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('customers', [
+            'name' => 'HTML Stripped',
+            'email' => 'dirty_email@example.com',
+            'phone' => '+1234567',
             'status' => 'active',
         ]);
     }

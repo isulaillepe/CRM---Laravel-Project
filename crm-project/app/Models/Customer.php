@@ -23,4 +23,12 @@ class Customer extends Model
     {
         return $this->hasMany(Proposal::class);
     }
+
+    /**
+     * Get all of the invoices for the customer.
+     */
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
 }

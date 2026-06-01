@@ -29,6 +29,12 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
+        $request->merge([
+            'name' => strip_tags(trim($request->input('name'))),
+            'email' => filter_var(trim($request->input('email')), FILTER_SANITIZE_EMAIL),
+            'phone' => $request->filled('phone') ? strip_tags(trim($request->input('phone'))) : null,
+        ]);
+
         // 1. Validate incoming data payloads strictly
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -56,6 +62,12 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
+        $request->merge([
+            'name' => strip_tags(trim($request->input('name'))),
+            'email' => filter_var(trim($request->input('email')), FILTER_SANITIZE_EMAIL),
+            'phone' => $request->filled('phone') ? strip_tags(trim($request->input('phone'))) : null,
+        ]);
+
         // 1. Validate the payload (ensure unique rule ignores the current customer's ID)
         $validated = $request->validate([
             'name' => 'required|string|max:255',
