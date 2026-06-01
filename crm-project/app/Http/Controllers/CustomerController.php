@@ -18,4 +18,70 @@ class CustomerController extends Controller
             'customers' => $customers
         ]);
     }
+    public function create()
+    {
+        // Serve the Create.vue component we just built
+        return Inertia::render('Customers/Create');
+    }
+
+    /**
+     * Store a newly created customer in storage.
+     */
+    public function store(Request $request)
+    {
+        // 1. Validate incoming data payloads strictly
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:customers',
+            'phone' => 'nullable|string|max:20',
+            'status' => 'required|string|in:active,inactive',
+        ]);
+
+        // 2. Mass-assign valid data directly to MySQL via the Model
+        Customer::create($validated);
+
+        // 3. Linearly redirect the browser instance straight back to the index interface
+        return redirect()->route('customers.index');
+    }
+    public function edit(Customer $customer)
+    {
+        // Serve the Edit form view and automatically pass the loaded customer object
+        return Inertia::render('Customers/Edit', [
+            'customer' => $customer
+        ]);
+    }
+
+    /**
+     * Update the specified customer in storage.
+     */
+    public function update(Request $request, Customer $customer)
+    {
+        // 1. Validate the payload (ensure unique rule ignores the current customer's ID)
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:customers,email,' . $customer->id,
+            'phone' => 'nullable|string|max:20',
+            'status' => 'required|string|in:active,inactive',
+        ]);
+
+        // 2. Perform the update linearly
+        $customer->update($validated);
+
+        // 3. Redirect back to the index layout
+        return redirect()->route('customers.index');
+    }
+
+    /**
+     * Remove the specified customer from storage.
+     */
+    public function destroy(Customer $customer)
+    {
+        // Delete the entry from MySQL
+        $customer->delete();
+
+        // Redirect back to refresh the data table array automatically
+        return redirect()->route('customers.index');
+    }
+    
+
 }
