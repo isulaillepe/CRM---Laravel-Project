@@ -17,7 +17,7 @@
 
     <div class="email-wrapper">
         <h1>Hi {{ $invoice->customer->name }},</h1>
-        <p>A new invoice has been generated for your account regarding your ongoing project subscriptions.</p>
+        <p>This Invoice has been mailled to you because of the outstanging balance that you have with us</p>
         
         <table width="100%" style="margin: 20px 0; font-size: 14px;">
             <tr><td><strong>Invoice Reference:</strong></td><td>#{{ $invoice->invoice_number }}</td></tr>
@@ -25,7 +25,7 @@
         </table>
 
         <p>Total Balance Due:</p>
-        <div class="amount-display">Rs. {{ number_format($invoice->amount, 2) }}</div>
+        <div class="amount-display">Rs.{{ number_format($invoice->amount, 2) }}</div>
 
         <div style="text-align: center;">
             <a href="{{ $checkoutUrl }}" class="btn-payment" target="_blank">💳 Pay Invoice Online</a>
@@ -34,7 +34,7 @@
         <p>Clicking the button above will redirect you to Stripe's completely secure, encrypted processing network to settle your statement balance instantly via Credit/Debit card.</p>
 
         <div class="footer">
-            Sent automatically by your custom CRM Platform Core. If you have any billing inquiries, contact administration support channels.
+            Sent automatically by CRM Platform by Isula Illeperuma . If you have any billing inquiries, contact administration support channels.
         </div>
     </div>
 
