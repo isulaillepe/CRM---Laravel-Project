@@ -34,17 +34,23 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    
+    // User Profile Management Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Invoice Sending Route
     Route::post('/invoices/{invoice}/send', [StripePaymentController::class, 'sendInvoiceEmail'])->name('invoices.send');
+
+    // Payment Success Route
     Route::get('/payment/{invoice}/success', [StripePaymentController::class, 'paymentSuccess'])->name('payment.success');
     Route::get('/payment/{invoice}/cancel', [StripePaymentController::class, 'paymentCancel'])->name('payment.cancel');
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
 
     Route::resource('customers', CustomerController::class)->except(['show']);
-    Route::resource('proposals', ProposalController::class)->only(['index', 'create', 'store', 'destroy']);
-    Route::resource('invoices', InvoiceController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('proposals', ProposalController::class)->only(['index', 'create', 'store', 'destroy','edit','update']);
+    Route::resource('invoices', InvoiceController::class)->only(['index', 'create', 'store', 'destroy','edit','update']);
 });
 
 require __DIR__.'/auth.php';

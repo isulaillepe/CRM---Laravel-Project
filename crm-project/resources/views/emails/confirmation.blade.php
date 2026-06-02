@@ -28,19 +28,19 @@
         
         <div class="receipt-card">
             <div class="receipt-row">
-                <span class="receipt-label">Invoice Settled:</span>
+                <span class="receipt-label">Invoice Settled: </span>
                 <span class="receipt-value">{{ $transaction->invoice->invoice_number }}</span>
             </div>
             <div class="receipt-row">
-                <span class="receipt-label">Stripe Reference:</span>
+                <span class="receipt-label">Stripe Reference: </span>
                 <span class="receipt-value">{{ substr($transaction->stripe_session_id, 0, 20) }}...</span>
             </div>
             <div class="receipt-row">
-                <span class="receipt-label">Date Processed:</span>
+                <span class="receipt-label">Date Processed: </span>
                 <span class="receipt-value">{{ $transaction->created_at->format('M d, Y h:i A') }}</span>
             </div>
             <div class="receipt-row total-row">
-                <span class="receipt-label" style="font-size: 16px;">Amount Captured:</span>
+                <span class="receipt-label" style="font-size: 16px;">Amount Captured: </span>
                 <span class="receipt-value" style="font-size: 18px; color: #15803d;">
                     Rs. {{ number_format($transaction->amount_paid, 2) }} LKR
                 </span>
