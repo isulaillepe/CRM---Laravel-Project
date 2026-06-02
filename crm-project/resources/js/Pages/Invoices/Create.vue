@@ -123,7 +123,7 @@ const submit = () => {
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500">Billing Amount (LKR)</label>
                                 <div class="mt-2 relative rounded-xl shadow-sm">
                                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                                        <span class="text-gray-400 text-sm">$</span>
+                                        <span class="text-gray-400 text-sm">Rs.</span>
                                     </div>
                                     <input 
                                         v-model="form.amount" 
@@ -132,7 +132,7 @@ const submit = () => {
                                         min="0"
                                         required 
                                         placeholder="0.00"
-                                        class="pl-8 block w-full rounded-xl border-gray-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5 transition duration-150"
+                                        class="pl-11 block w-full rounded-xl border-gray-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5 transition duration-150"
                                     />
                                 </div>
                                 <div v-if="form.errors.amount" class="text-rose-500 text-xs mt-1 font-medium">{{ form.errors.amount }}</div>

@@ -58,7 +58,7 @@ const deleteProposal = (id) => {
 
 // Formatter Helpers
 const formatCurrency = (val) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'LKR' }).format(val);
+    return 'Rs. ' + parseFloat(val).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 };
 
 const formatDate = (dateStr) => {
