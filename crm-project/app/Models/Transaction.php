@@ -16,4 +16,12 @@ class Transaction extends Model
         'currency',
         'payment_status',
     ];
+
+    /**
+     * Get the invoice associated with the transaction.
+     */
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
 }

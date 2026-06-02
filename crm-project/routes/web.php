@@ -42,9 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment/{invoice}/cancel', [StripePaymentController::class, 'paymentCancel'])->name('payment.cancel');
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
 
-    Route::resource('customers', CustomerController::class);
-    Route::resource('proposals', ProposalController::class);
-    Route::resource('invoices', InvoiceController::class);
+    Route::resource('customers', CustomerController::class)->except(['show']);
+    Route::resource('proposals', ProposalController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('invoices', InvoiceController::class)->only(['index', 'create', 'store', 'destroy']);
 });
 
 require __DIR__.'/auth.php';

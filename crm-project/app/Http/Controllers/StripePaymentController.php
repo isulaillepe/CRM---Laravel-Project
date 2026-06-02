@@ -21,7 +21,7 @@ class StripePaymentController extends Controller
         $invoice = Invoice::with('customer')->findOrFail($invoiceId);
 
         // 2. Authorize with your Stripe Secret Test Key
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe::setApiKey(config('services.stripe.secret'));
 
         try {
             // 3. Request a Hosted Checkout Link from Stripe
@@ -39,7 +39,7 @@ class StripePaymentController extends Controller
                 ]],
                 'mode' => 'payment',
                 // Update status automatically when redirected back
-                'success_url' => route('payment.success', ['invoice' => $invoice->id]),
+                'success_url' => route('payment.success', ['invoice' => $invoice->id]) . '?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => route('payment.cancel', ['invoice' => $invoice->id]),
                 'customer_email' => $invoice->customer->email,
             ]);
@@ -62,23 +62,8 @@ class StripePaymentController extends Controller
     /**
      * Handle payment success.
      */
-    public function paymentSuccess(Invoice $invoice)
+    public function paymentSuccess(Request $request, Invoice $invoice)
     {
-        $invoice->update(['status' => 'paid']);
-        return redirect()->route('invoices.index')->with('success', "Invoice #{$invoice->invoice_number} paid successfully!");
-    }
-
-    /**
-     * Handle payment cancel.
-     */
-    public function paymentCancel(Invoice $invoice)
-    {
-        return redirect()->route('invoices.index')->with('error', "Payment for invoice #{$invoice->invoice_number} was cancelled.");
-    }
-    public function success(Request $request, $invoiceId)
-    {
-        $invoice = Invoice::findOrFail($invoiceId);
-        
         // 1. Double check the invoice isn't already paid to prevent accidental duplicate logging
         if ($invoice->status !== 'paid') {
             
@@ -97,6 +82,14 @@ class StripePaymentController extends Controller
 
         // 4. Redirect back to your single-page Vue component index while flashing a notice
         return redirect()->route('invoices.index')->with('success', "Payment successfully processed for Invoice #{$invoice->invoice_number}!");
+    }
+
+    /**
+     * Handle payment cancel.
+     */
+    public function paymentCancel(Invoice $invoice)
+    {
+        return redirect()->route('invoices.index')->with('error', "Payment for invoice #{$invoice->invoice_number} was cancelled.");
     }
 
 }

@@ -33,7 +33,7 @@ Artisan::command('crm:test-gateways {email?}', function ($email = 'test@example.
 
     $this->info('Testing Stripe SDK Integration...');
     try {
-        $stripeSecret = env('STRIPE_SECRET');
+        $stripeSecret = config('services.stripe.secret');
         if (empty($stripeSecret)) {
             throw new \Exception('STRIPE_SECRET is empty/not set in environment.');
         }
