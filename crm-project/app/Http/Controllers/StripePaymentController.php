@@ -27,7 +27,7 @@ class StripePaymentController extends Controller
                 'payment_method_types' => ['card'],
                 'line_items' => [[
                     'price_data' => [
-                        'currency' => 'usd',
+                        'currency' => 'lkr',
                         'product_data' => [
                             'name' => "Invoice Settle: #" . $invoice->invoice_number,
                         ],

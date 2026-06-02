@@ -25,7 +25,7 @@
         </table>
 
         <p>Total Balance Due:</p>
-        <div class="amount-display">${{ number_format($invoice->amount, 2) }} USD</div>
+        <div class="amount-display">${{ number_format($invoice->amount, 2) }} LKR</div>
 
         <div style="text-align: center;">
             <a href="{{ $checkoutUrl }}" class="btn-payment" target="_blank">💳 Pay Invoice Online</a>

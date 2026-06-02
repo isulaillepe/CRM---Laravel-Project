@@ -105,7 +105,7 @@ const submit = () => {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Deal Value -->
                             <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500">Deal Value (USD)</label>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500">Deal Value (LKR)</label>
                                 <div class="mt-2 relative rounded-xl shadow-sm">
                                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                                         <span class="text-gray-400 text-sm">$</span>
