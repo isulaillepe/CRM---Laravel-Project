@@ -8,7 +8,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\StripePaymentController;
-
+use App\Http\Controllers\TransactionController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/invoices/{invoice}/send', [StripePaymentController::class, 'sendInvoiceEmail'])->name('invoices.send');
     Route::get('/payment/{invoice}/success', [StripePaymentController::class, 'paymentSuccess'])->name('payment.success');
     Route::get('/payment/{invoice}/cancel', [StripePaymentController::class, 'paymentCancel'])->name('payment.cancel');
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
 
     Route::resource('customers', CustomerController::class);
     Route::resource('proposals', ProposalController::class);
