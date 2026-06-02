@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
     invoices: {
@@ -72,6 +73,14 @@ const formatDate = (dateStr) => {
         day: 'numeric'
     });
 };
+const emailInvoiceToClient = (invoiceId) => {
+    // Fire an Inertia post request to our newly configured backend route
+    router.post(`/invoices/${invoiceId}/send`, {}, {
+        onStart: () => alert('Contacting Stripe and dispatching email package...'),
+        onSuccess: () => alert('Success! Check your Mailtrap dashboard.'),
+        onError: (err) => console.error(err)
+    });
+    };
 </script>
 
 <template>
@@ -266,15 +275,26 @@ const formatDate = (dateStr) => {
 
                                     <!-- Actions -->
                                     <td class="p-4 pr-6 text-right">
-                                        <button 
-                                            @click="deleteInvoice(invoice.id)" 
-                                            class="p-2 text-gray-450 hover:text-rose-600 hover:bg-rose-50/70 rounded-xl transition duration-150 focus:outline-none"
-                                            title="Delete Invoice"
-                                        >
-                                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                            </svg>
-                                        </button>
+                                        <div class="flex items-center justify-end space-x-2">
+                                            <button 
+                                                @click="emailInvoiceToClient(invoice.id)" 
+                                                class="inline-flex items-center p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition duration-150 focus:outline-none"
+                                                title="Email Invoice to Client"
+                                            >
+                                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                </svg>
+                                            </button>
+                                            <button 
+                                                @click="deleteInvoice(invoice.id)" 
+                                                class="p-2 text-gray-450 hover:text-rose-600 hover:bg-rose-50/70 rounded-xl transition duration-150 focus:outline-none"
+                                                title="Delete Invoice"
+                                            >
+                                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
 

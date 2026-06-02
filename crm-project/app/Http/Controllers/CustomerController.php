@@ -9,7 +9,7 @@ use Inertia\Inertia;
 class CustomerController extends Controller
 {
     public function index()
-    {
+    { 
         // 1. Fetch customers with eager-loaded relations to avoid N+1 queries
         $customers = Customer::with(['invoices', 'proposals'])->latest()->get();
 
