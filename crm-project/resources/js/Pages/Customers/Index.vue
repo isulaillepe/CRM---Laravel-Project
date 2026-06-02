@@ -295,7 +295,7 @@ const getInitials = (name) => {
                     <div class="bg-white px-6 pt-6 pb-4 sm:p-6">
                         <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-5">
                             <h3 class="text-lg font-bold text-gray-900" id="modal-title">
-                                Create Customer Profile
+                                Add New Customer
                             </h3>
                             <button @click="closeCreateModal" class="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition">
                                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -313,7 +313,7 @@ const getInitials = (name) => {
                                     type="text" 
                                     required 
                                     class="mt-1.5 block w-full rounded-xl border-gray-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5 transition duration-150"
-                                    placeholder="Jane Doe"
+                                    placeholder="Isula Illeperuma"
                                 />
                                 <div v-if="createForm.errors.name" class="text-rose-500 text-xs mt-1 font-medium">{{ createForm.errors.name }}</div>
                             </div>
@@ -326,7 +326,7 @@ const getInitials = (name) => {
                                     type="email" 
                                     required 
                                     class="mt-1.5 block w-full rounded-xl border-gray-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5 transition duration-150"
-                                    placeholder="jane@company.com"
+                                    placeholder="hello@gmail.com"
                                 />
                                 <div v-if="createForm.errors.email" class="text-rose-500 text-xs mt-1 font-medium">{{ createForm.errors.email }}</div>
                             </div>
@@ -338,7 +338,7 @@ const getInitials = (name) => {
                                     v-model="createForm.phone" 
                                     type="text" 
                                     class="mt-1.5 block w-full rounded-xl border-gray-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5 transition duration-150"
-                                    placeholder="+1 (555) 019-2834"
+                                    placeholder="+94774710311"
                                 />
                                 <div v-if="createForm.errors.phone" class="text-rose-500 text-xs mt-1 font-medium">{{ createForm.errors.phone }}</div>
                             </div>
