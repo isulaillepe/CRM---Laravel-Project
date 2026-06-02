@@ -17,6 +17,8 @@ A robust, premium Customer Relationship Management (CRM) application built with 
 
 ## 📂 Project Directory Structure
 
+The application codebase is situated inside the `crm-project` folder:
+
 ```text
 crm-project/
 ├── app/
