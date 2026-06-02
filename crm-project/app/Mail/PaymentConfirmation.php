@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Transaction;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -11,14 +12,16 @@ use Illuminate\Queue\SerializesModels;
 
 class PaymentConfirmation extends Mailable
 {
-    use Queueable, SerializesModels;
+   use Queueable, SerializesModels;
+
+   public $transaction;
 
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(Transaction $transaction)
     {
-        //
+        $this->transaction = $transaction;
     }
 
     /**
@@ -27,7 +30,7 @@ class PaymentConfirmation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Payment Confirmation',
+            subject: "Thank You! Payment Received for Invoice #" . $this->transaction->invoice->invoice_number,
         );
     }
 
@@ -37,7 +40,7 @@ class PaymentConfirmation extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.confirmation', // 💡 Make sure your blade file is named confirmation.blade.php
         );
     }
 
