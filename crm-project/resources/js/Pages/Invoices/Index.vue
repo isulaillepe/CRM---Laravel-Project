@@ -1,9 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
-import { router } from '@inertiajs/vue3';
-
+import { Head, Link, useForm, router , usePage } from '@inertiajs/vue3';
+import { ref, computed , watch} from 'vue';
 const props = defineProps({
     invoices: {
         type: Array,
@@ -81,6 +79,22 @@ const emailInvoiceToClient = (invoiceId) => {
         onError: (err) => console.error(err)
     });
     };
+
+    const page = usePage();
+const flashMessage = ref(null);
+
+// Watch for flash notifications sliding down the Inertia data wire
+watch(() => page.props.flash?.success, (newSuccess) => {
+    if (newSuccess) {
+        flashMessage.value = newSuccess;
+        // Automatically dismiss the success alert after 5 seconds
+        setTimeout(() => {
+            flashMessage.value = null;
+        }, 5000);
+    }
+}, { immediate: true });
+
+
 </script>
 
 <template>
@@ -110,6 +124,15 @@ const emailInvoiceToClient = (invoiceId) => {
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
+                <div v-if="flashMessage" class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
+        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-xl shadow-sm text-sm font-semibold flex items-center space-x-2">
+            <svg class="h-5 w-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{{ flashMessage }}</span>
+        </div>
+    </div>
+    
                 <!-- Invoicing Statistics Panels -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                     <!-- panel 1: Total Invoiced -->

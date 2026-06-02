@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Mail\CustomerInvoiceMail;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Transaction;
+use Illuminate\Http\Request;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 
@@ -73,4 +75,28 @@ class StripePaymentController extends Controller
     {
         return redirect()->route('invoices.index')->with('error', "Payment for invoice #{$invoice->invoice_number} was cancelled.");
     }
+    public function success(Request $request, $invoiceId)
+    {
+        $invoice = Invoice::findOrFail($invoiceId);
+        
+        // 1. Double check the invoice isn't already paid to prevent accidental duplicate logging
+        if ($invoice->status !== 'paid') {
+            
+            // 2. Flip database status flags
+            $invoice->update(['status' => 'paid']);
+
+            // 3. Log a detailed audit record to your Transactions ledger
+            Transaction::create([
+                'invoice_id' => $invoice->id,
+                'stripe_session_id' => $request->get('session_id') ?? 'MOCK_STRIPE_SESSION_ID',
+                'amount_paid' => $invoice->amount,
+                'currency' => 'LKR',
+                'payment_status' => 'completed'
+            ]);
+        }
+
+        // 4. Redirect back to your single-page Vue component index while flashing a notice
+        return redirect()->route('invoices.index')->with('success', "Payment successfully processed for Invoice #{$invoice->invoice_number}!");
+    }
+
 }
