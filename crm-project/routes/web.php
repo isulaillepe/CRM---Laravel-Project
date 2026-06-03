@@ -1,31 +1,75 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-
+use Inertia\Inertia;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ProposalController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\StripePaymentController;
+use App\Http\Controllers\TransactionController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
 |
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $totalInvoiced = \App\Models\Invoice::sum('amount');
+    $totalPaid = \App\Models\Invoice::where('status', 'paid')->sum('amount');
+    $totalUnpaid = \App\Models\Invoice::where('status', 'unpaid')->sum('amount');
+    $totalOverdue = \App\Models\Invoice::where('status', 'overdue')->sum('amount');
+
+    $paidCount = \App\Models\Invoice::where('status', 'paid')->count();
+    $unpaidCount = \App\Models\Invoice::where('status', 'unpaid')->count();
+    $overdueCount = \App\Models\Invoice::where('status', 'overdue')->count();
+
+    return Inertia::render('Dashboard', [
+        'totalInvoiced' => $totalInvoiced,
+        'totalPaid' => $totalPaid,
+        'totalUnpaid' => $totalUnpaid,
+        'totalOverdue' => $totalOverdue,
+        'paidCount' => $paidCount,
+        'unpaidCount' => $unpaidCount,
+        'overdueCount' => $overdueCount,
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    
+    // User Profile Management Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Invoice Sending Route
+    Route::post('/invoices/{invoice}/send', [StripePaymentController::class, 'sendInvoiceEmail'])->name('invoices.send');
+
+    // Payment Success Route
+    Route::get('/payment/{invoice}/success', [StripePaymentController::class, 'paymentSuccess'])->name('payment.success');
+    Route::get('/payment/{invoice}/cancel', [StripePaymentController::class, 'paymentCancel'])->name('payment.cancel');
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+
+    Route::resource('customers', CustomerController::class)->except(['show']);
+    Route::get('/proposals/board', [ProposalController::class, 'board'])->name('proposals.board');
+    Route::resource('proposals', ProposalController::class)->only(['index', 'create', 'store', 'destroy','edit','update']);
+    Route::get('/invoices/board', [InvoiceController::class, 'board'])->name('invoices.board');
+    Route::resource('invoices', InvoiceController::class)->only(['index', 'create', 'store', 'destroy','edit','update']);
 });
 
 require __DIR__.'/auth.php';
