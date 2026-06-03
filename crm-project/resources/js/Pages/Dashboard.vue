@@ -1,6 +1,9 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import InvoiceStatusChart from '@/Components/InvoiceStatusChart.vue';
+import InvoiceTrendRow from '@/Components/InvoiceTrendRow.vue';
+import ChartActivityLine from '@/Components/ChartActivityLine.vue';
+import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
     totalInvoiced: {
@@ -18,6 +21,18 @@ defineProps({
     totalOverdue: {
         type: [Number, String],
         default: 0
+    },
+    paidCount: {
+        type: Number,
+        default: 0,
+    },
+    unpaidCount: {
+        type: Number,
+        default: 0,
+    },
+    overdueCount: {
+        type: Number,
+        default: 0,
     }
 });
 
@@ -36,7 +51,7 @@ const formatCurrency = (val) => {
         </template>
 
         <div class="py-8 bg-white min-h-screen">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
 
                 <!-- Invoicing Statistics Panels -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -93,13 +108,61 @@ const formatCurrency = (val) => {
                     </div>
                 </div>
 
-                <!-- Main Greeting Block -->
-                <div class="border border-zinc-200 rounded-xl bg-white p-8">
-                    <h3 class="text-zinc-900 font-medium text-base tracking-tight">System Operational</h3>
-                    <p class="text-zinc-500 text-xs mt-1.5 leading-relaxed">
-                        Welcome to Central Distributors CRM. All data channels and automated pipelines are fully operational.
-                        Navigate to the Customers, Proposals, or Invoices modules from the navigation bar to manage your logistical pipeline.
-                    </p>
+                <!-- Chart + Info Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Invoice Status Doughnut Chart -->
+                    <InvoiceStatusChart
+                        :paidCount="paidCount"
+                        :unpaidCount="unpaidCount"
+                        :overdueCount="overdueCount"
+                    />
+
+                    <!-- Main Greeting Block -->
+                    <div class="lg:col-span-2 border border-zinc-200 rounded-xl bg-white p-8 flex flex-col justify-center">
+                        <h3 class="text-zinc-900 font-medium text-base tracking-tight">System Operational</h3>
+                        <p class="text-zinc-500 text-xs mt-1.5 leading-relaxed">
+                            Welcome to Central Distributors CRM. All data channels and automated pipelines are fully operational.
+                            Navigate to the Customers, Proposals, or Invoices modules from the navigation bar to manage your logistical pipeline.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Line Chart Activity -->
+                <ChartActivityLine />
+
+                <!-- Core Financial Trends -->
+                <div class="space-y-4">
+                    <h3 class="text-base font-semibold text-zinc-900 tracking-tight">Core Financial Trends</h3>
+                    <p class="text-xs text-zinc-400 mt-0.5">Sparkline visual trends for invoice segments</p>
+                    <div class="flex flex-col gap-4">
+                        <InvoiceTrendRow
+                            invoiceId="TOTAL"
+                            clientName="Total Invoiced"
+                            :amountDue="parseFloat(totalInvoiced)"
+                            status="unpaid"
+                            :showActions="false"
+                            :minimalist="true"
+                            :dateCreated="new Date().toISOString()"
+                        />
+                        <InvoiceTrendRow
+                            invoiceId="PAID"
+                            clientName="Total Amount Paid"
+                            :amountDue="parseFloat(totalPaid)"
+                            status="paid"
+                            :showActions="false"
+                            :minimalist="true"
+                            :dateCreated="new Date().toISOString()"
+                        />
+                        <InvoiceTrendRow
+                            invoiceId="UNPAID"
+                            clientName="Total Amount Unpaid"
+                            :amountDue="parseFloat(totalUnpaid)"
+                            status="overdue"
+                            :showActions="false"
+                            :minimalist="true"
+                            :dateCreated="new Date().toISOString()"
+                        />
+                    </div>
                 </div>
                 
             </div>
