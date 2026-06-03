@@ -32,7 +32,7 @@ const formatCurrency = (val) => {
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-2xl text-zinc-900 tracking-tight">Dashboard</h2>
-            <p class="text-xs text-zinc-500 mt-1">Stark summary of the CRM logistical operations and billing milestones.</p>
+            <p class="text-xs text-zinc-500 mt-1">Summary of the CRM logistical operations and billing milestones.</p>
         </template>
 
         <div class="py-8 bg-white min-h-screen">

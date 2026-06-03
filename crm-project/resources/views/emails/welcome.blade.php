@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Your Custom CRM Dashboard!</title>
+    <title>Welcome to CRM Dashboard!</title>
     <style>
         body {
             background-color: #f3f4f6;
@@ -130,7 +130,7 @@
             <!-- Content -->
             <div class="content">
                 <h2 class="greeting">Hi {{ $user->name }},</h2>
-                <p class="intro">We're absolutely thrilled to welcome you aboard! Your new Custom CRM Dashboard is fully prepared and waiting to help you streamline your customer relationships, manage leads, and grow your business.</p>
+                <p class="intro">We're absolutely thrilled to welcome you aboard!  CRM Dashboard is fully prepared to grow your business.</p>
 
                 <!-- Features Card -->
                 <div class="card">

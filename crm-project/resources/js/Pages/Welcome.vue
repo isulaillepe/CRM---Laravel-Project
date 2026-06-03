@@ -20,7 +20,7 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Welcome | Antigravity CRM" />
+    <Head title="Welcome | Central Distriubutors CRM" />
 
     <div class="min-h-screen bg-white text-zinc-900 flex flex-col font-sans antialiased selection:bg-blue-600 selection:text-white">
         <!-- Top Navbar -->
@@ -29,9 +29,9 @@ defineProps({
                 <div class="flex items-center space-x-2.5">
                     <!-- Stark Monochrome Logo -->
                     <div class="h-8 w-8 bg-zinc-900 text-white rounded flex items-center justify-center font-bold tracking-tighter text-sm">
-                        Ω
+                        CC
                     </div>
-                    <span class="font-semibold text-zinc-900 tracking-tight text-sm">Antigravity CRM</span>
+                    <span class="font-semibold text-zinc-900 tracking-tight text-sm">Central Distriubutors CRM</span>
                 </div>
                 
                 <nav v-if="canLogin" class="flex items-center space-x-4">
@@ -69,15 +69,15 @@ defineProps({
                 <!-- Hero Header -->
                 <div class="space-y-4">
                     <div class="inline-flex items-center space-x-1.5 px-2.5 py-1 bg-zinc-50 border border-zinc-200 rounded text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">
-                        <span>Minimalist Ops</span>
+                        <span>Central Distributors</span>
                         <span class="h-1 w-1 rounded-full bg-blue-600"></span>
                         <span>Release v1.0</span>
                     </div>
                     <h1 class="text-4xl sm:text-5xl font-semibold text-zinc-950 tracking-tight leading-none max-w-2xl mx-auto">
-                        A stark workspace for commercial operations.
+                        The CRM for a streamlined business.
                     </h1>
                     <p class="text-zinc-500 text-base max-w-lg mx-auto font-normal leading-relaxed">
-                        Say goodbye to visual noise. Track active pipelines, manage customers, and invoice statements in a clean, frictionless interface.
+                        Say goodbye to cluttered spreadsheets. Track quotations, manage customer interactions, and streamline your sales operations—all within one intuitive platform.
                     </p>
                 </div>
 
@@ -183,7 +183,7 @@ defineProps({
         <footer class="border-t border-zinc-200 bg-white py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-550 space-y-4 sm:space-y-0">
                 <div>
-                    &copy; 2026 Antigravity. Open-source under MIT.
+                    &copy; Created by IsulaI 2026.
                 </div>
                 <div class="flex items-center space-x-1.5">
                     <span>Laravel v{{ laravelVersion }}</span>
