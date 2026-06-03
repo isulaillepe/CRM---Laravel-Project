@@ -48,6 +48,54 @@ class InvoiceController extends Controller
         return redirect()->route('invoices.index');
     }
 
+    public function edit(Invoice $invoice)
+    {
+        if ($invoice->status === 'paid') {
+            return redirect()->route('invoices.index')->with('error', 'Paid invoices cannot be edited.');
+        }
+
+        $customers = Customer::all();
+
+        return Inertia::render('Invoices/Edit', [
+            'invoice' => $invoice,
+            'customers' => $customers
+        ]);
+    }
+
+    public function update(Request $request, Invoice $invoice)
+    {
+        if ($invoice->status === 'paid') {
+            return redirect()->route('invoices.index')->with('error', 'Paid invoices cannot be updated.');
+        }
+
+        $request->merge([
+            'invoice_number' => strip_tags(trim($request->input('invoice_number'))),
+        ]);
+
+        $validated = $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'invoice_number' => 'required|string|max:255|unique:invoices,invoice_number,' . $invoice->id,
+            'amount' => 'required|numeric|min:0',
+            'status' => 'required|string|in:unpaid,paid,overdue',
+            'due_date' => 'required|date',
+        ]);
+
+        $oldStatus = $invoice->status;
+        $invoice->update($validated);
+
+        if ($validated['status'] === 'paid' && $oldStatus !== 'paid') {
+            \App\Models\Transaction::create([
+                'invoice_id' => $invoice->id,
+                'stripe_session_id' => 'MANUAL_PAYMENT_' . strtoupper(uniqid()),
+                'amount_paid' => $invoice->amount,
+                'currency' => 'LKR',
+                'payment_status' => 'completed'
+            ]);
+        }
+
+        return redirect()->route('invoices.index')->with('success', 'Invoice updated successfully.');
+    }
+
     public function destroy(Invoice $invoice)
     {
         $invoice->delete();

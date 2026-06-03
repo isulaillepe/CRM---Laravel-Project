@@ -49,6 +49,36 @@ class ProposalController extends Controller
         return redirect()->route('proposals.index');
     }
 
+    public function edit(Proposal $proposal)
+    {
+        $customers = Customer::all();
+
+        return Inertia::render('Proposals/Edit', [
+            'proposal' => $proposal,
+            'customers' => $customers
+        ]);
+    }
+
+    public function update(Request $request, Proposal $proposal)
+    {
+        $request->merge([
+            'title' => strip_tags(trim($request->input('title'))),
+            'description' => strip_tags(trim($request->input('description'))),
+        ]);
+
+        $validated = $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'value' => 'required|numeric|min:0',
+            'status' => 'required|string|in:draft,sent,accepted,declined',
+        ]);
+
+        $proposal->update($validated);
+
+        return redirect()->route('proposals.index')->with('success', 'Proposal updated successfully.');
+    }
+
     public function destroy(Proposal $proposal)
     {
         $proposal->delete();
