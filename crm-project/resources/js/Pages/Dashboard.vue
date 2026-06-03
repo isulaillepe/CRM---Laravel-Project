@@ -2,7 +2,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InvoiceStatusChart from '@/Components/InvoiceStatusChart.vue';
 import InvoiceTrendRow from '@/Components/InvoiceTrendRow.vue';
-import { Head } from '@inertiajs/vue3';
+import ChartActivityLine from '@/Components/ChartActivityLine.vue';
+import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
     totalInvoiced: {
@@ -125,6 +126,9 @@ const formatCurrency = (val) => {
                         </p>
                     </div>
                 </div>
+
+                <!-- Line Chart Activity -->
+                <ChartActivityLine />
 
                 <!-- Core Financial Trends -->
                 <div class="space-y-4">
