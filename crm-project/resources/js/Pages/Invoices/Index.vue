@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm, router , usePage } from '@inertiajs/vue3';
 import { ref, computed , watch} from 'vue';
+import Dropdown from '@/Components/Dropdown.vue';
 const props = defineProps({
     invoices: {
         type: Array,
@@ -94,7 +95,19 @@ watch(() => page.props.flash?.success, (newSuccess) => {
     }
 }, { immediate: true });
 
-
+// Change status handler
+const setStatus = (invoice, status) => {
+    if (invoice.status === status) return;
+    router.patch(route('invoices.update', invoice.id), {
+        customer_id: invoice.customer_id,
+        invoice_number: invoice.invoice_number,
+        amount: invoice.amount,
+        status: status,
+        due_date: invoice.due_date
+    }, {
+        preserveScroll: true,
+    });
+};
 </script>
 
 <template>
@@ -313,7 +326,47 @@ watch(() => page.props.flash?.success, (newSuccess) => {
 
                                     <!-- Actions -->
                                     <td class="p-4 pr-6 text-right">
-                                        <div class="flex items-center justify-end space-x-1.5">
+
+                                        <div class="inline-flex items-center space-x-1.5">
+                                            <!-- Status Dropdown -->
+                                            <Dropdown v-if="invoice.status !== 'paid'" align="right" width="48">
+                                                <template #trigger>
+                                                    <button class="p-1.5 hover:bg-zinc-100 rounded-lg transition duration-150 focus:outline-none flex items-center space-x-1" title="Change Status">
+                                                        <span :class="['h-2 w-2 rounded-full', invoice.status === 'paid' ? 'bg-emerald-500' : (invoice.status === 'unpaid' ? 'bg-amber-500' : 'bg-rose-500')]"></span>
+                                                        <svg class="h-3 w-3 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                                                        </svg>
+                                                    </button>
+                                                </template>
+                                                <template #content>
+                                                    <div class="px-3 py-1.5 text-[9px] font-semibold text-zinc-400 uppercase tracking-wider">Change Status</div>
+                                                    <button 
+                                                        @click="setStatus(invoice, 'paid')"
+                                                        class="flex items-center w-full px-4 py-2 text-left text-xs font-semibold text-zinc-700 hover:bg-zinc-50 transition duration-150"
+                                                        :class="{ 'bg-zinc-50/50 text-emerald-600': invoice.status === 'paid' }"
+                                                    >
+                                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 mr-2"></span>
+                                                        Paid
+                                                    </button>
+                                                    <button 
+                                                        @click="setStatus(invoice, 'unpaid')"
+                                                        class="flex items-center w-full px-4 py-2 text-left text-xs font-semibold text-zinc-700 hover:bg-zinc-50 transition duration-150"
+                                                        :class="{ 'bg-zinc-50/50 text-amber-600': invoice.status === 'unpaid' }"
+                                                    >
+                                                        <span class="h-1.5 w-1.5 rounded-full bg-amber-500 mr-2"></span>
+                                                        Unpaid
+                                                    </button>
+                                                    <button 
+                                                        @click="setStatus(invoice, 'overdue')"
+                                                        class="flex items-center w-full px-4 py-2 text-left text-xs font-semibold text-zinc-700 hover:bg-zinc-50 transition duration-150"
+                                                        :class="{ 'bg-zinc-50/50 text-rose-600': invoice.status === 'overdue' }"
+                                                    >
+                                                        <span class="h-1.5 w-1.5 rounded-full bg-rose-500 mr-2"></span>
+                                                        Overdue
+                                                    </button>
+                                                </template>
+                                            </Dropdown>
+
                                             <Link 
                                                 v-if="invoice.status !== 'paid'"
                                                 :href="route('invoices.edit', invoice.id)"
