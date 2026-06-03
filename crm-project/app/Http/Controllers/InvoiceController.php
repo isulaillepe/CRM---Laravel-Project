@@ -50,8 +50,10 @@ class InvoiceController extends Controller
 
     public function edit(Invoice $invoice)
     {
+        $targetRoute = request()->input('redirect_to') === 'board' ? 'invoices.board' : 'invoices.index';
+
         if ($invoice->status === 'paid') {
-            return redirect()->route('invoices.index')->with('error', 'Paid invoices cannot be edited.');
+            return redirect()->route($targetRoute)->with('error', 'Paid invoices cannot be edited.');
         }
 
         $customers = Customer::all();
@@ -64,8 +66,10 @@ class InvoiceController extends Controller
 
     public function update(Request $request, Invoice $invoice)
     {
+        $targetRoute = $request->input('redirect_to') === 'board' ? 'invoices.board' : 'invoices.index';
+
         if ($invoice->status === 'paid') {
-            return redirect()->route('invoices.index')->with('error', 'Paid invoices cannot be updated.');
+            return redirect()->route($targetRoute)->with('error', 'Paid invoices cannot be updated.');
         }
 
         $request->merge([
@@ -93,13 +97,24 @@ class InvoiceController extends Controller
             ]);
         }
 
-        return redirect()->route('invoices.index')->with('success', 'Invoice updated successfully.');
+        return redirect()->route($targetRoute)->with('success', 'Invoice updated successfully.');
     }
 
     public function destroy(Invoice $invoice)
     {
         $invoice->delete();
 
-        return redirect()->route('invoices.index');
+        $targetRoute = request()->input('redirect_to') === 'board' ? 'invoices.board' : 'invoices.index';
+
+        return redirect()->route($targetRoute);
+    }
+
+    public function board()
+    {
+        $invoices = Invoice::with('customer')->latest()->get();
+
+        return Inertia::render('Invoices/InvoiceBoard', [
+            'invoices' => $invoices
+        ]);
     }
 }

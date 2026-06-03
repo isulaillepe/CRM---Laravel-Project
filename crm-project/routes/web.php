@@ -59,7 +59,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
 
     Route::resource('customers', CustomerController::class)->except(['show']);
+    Route::get('/proposals/board', [ProposalController::class, 'board'])->name('proposals.board');
     Route::resource('proposals', ProposalController::class)->only(['index', 'create', 'store', 'destroy','edit','update']);
+    Route::get('/invoices/board', [InvoiceController::class, 'board'])->name('invoices.board');
     Route::resource('invoices', InvoiceController::class)->only(['index', 'create', 'store', 'destroy','edit','update']);
 });
 

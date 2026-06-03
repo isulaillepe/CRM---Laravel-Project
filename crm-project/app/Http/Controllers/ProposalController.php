@@ -76,6 +76,10 @@ class ProposalController extends Controller
 
         $proposal->update($validated);
 
+        if ($request->input('redirect_to') === 'board') {
+            return redirect()->route('proposals.board')->with('success', 'Proposal updated successfully.');
+        }
+
         return redirect()->route('proposals.index')->with('success', 'Proposal updated successfully.');
     }
 
@@ -83,6 +87,19 @@ class ProposalController extends Controller
     {
         $proposal->delete();
 
+        if (request()->input('redirect_to') === 'board') {
+            return redirect()->route('proposals.board')->with('success', 'Proposal deleted successfully.');
+        }
+
         return redirect()->route('proposals.index');
+    }
+
+    public function board()
+    {
+        $proposals = Proposal::with('customer')->latest()->get();
+
+        return Inertia::render('Proposals/PipelineBoard', [
+            'proposals' => $proposals
+        ]);
     }
 }
