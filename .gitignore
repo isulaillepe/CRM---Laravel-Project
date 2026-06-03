@@ -1,0 +1,12 @@
+# Environment files (contain secrets - never commit)
+crm-project/.env
+crm-project/.env.backup
+crm-project/.env.production
+
+# Dependencies
+crm-project/node_modules/
+crm-project/vendor/
+
+# Build artifacts
+crm-project/public/build/
+crm-project/public/hot
