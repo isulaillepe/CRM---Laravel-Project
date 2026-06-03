@@ -1,7 +1,8 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, useForm, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
+import Dropdown from '@/Components/Dropdown.vue';
 
 const props = defineProps({
     customers: {
@@ -90,13 +91,25 @@ const deleteCustomer = (id) => {
     }
 };
 
+const setStatus = (customer, status) => {
+    if (customer.status === status) return;
+    router.patch(route('customers.update', customer.id), {
+        name: customer.name,
+        email: customer.email,
+        phone: customer.phone || '',
+        status: status
+    }, {
+        preserveScroll: true,
+    });
+};
+
 const getInitials = (name) => {
     if (!name) return 'C';
     return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
 };
 </script>
 
-<<template>
+<template>
     <Head title="Customer Management" />
 
     <AuthenticatedLayout>
@@ -109,7 +122,7 @@ const getInitials = (name) => {
                 <div>
                     <button 
                         @click="openCreateModal"
-                        class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg font-semibold text-xs text-white hover:bg-blue-700 active:bg-blue-800 focus:outline-none transition duration-150 ease-in-out shadow-sm"
+                        class="inline-flex items-center px-4 py-2 bg-zinc-900 border border-transparent rounded-lg font-semibold text-xs text-white hover:bg-zinc-850 active:bg-black focus:outline-none transition duration-150 ease-in-out shadow-sm"
                     >
                         <svg class="h-4 w-4 mr-1.5 -ml-0.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
@@ -211,22 +224,53 @@ const getInitials = (name) => {
 
                                     <!-- Action Buttons -->
                                     <td class="p-4 pr-6 text-right">
-                                        <div class="inline-flex items-center space-x-1">
+                                        <div class="inline-flex items-center space-x-1.5">
+                                            <!-- Status Dropdown -->
+                                            <Dropdown align="right" width="48">
+                                                <template #trigger>
+                                                    <button class="p-1.5 hover:bg-zinc-100 rounded-lg transition duration-150 focus:outline-none flex items-center space-x-1" title="Change Status">
+                                                        <span :class="['h-2 w-2 rounded-full', customer.status === 'active' ? 'bg-emerald-500' : 'bg-zinc-400']"></span>
+                                                        <svg class="h-3 w-3 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                                                        </svg>
+                                                    </button>
+                                                </template>
+                                                <template #content>
+                                                    <div class="px-3 py-1.5 text-[9px] font-semibold text-zinc-400 uppercase tracking-wider">Change Status</div>
+                                                    <button 
+                                                        @click="setStatus(customer, 'active')"
+                                                        class="flex items-center w-full px-4 py-2 text-left text-xs font-semibold text-zinc-700 hover:bg-zinc-50 transition duration-150"
+                                                        :class="{ 'bg-zinc-50/50 text-emerald-600': customer.status === 'active' }"
+                                                    >
+                                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 mr-2"></span>
+                                                        Active
+                                                    </button>
+                                                    <button 
+                                                        @click="setStatus(customer, 'inactive')"
+                                                        class="flex items-center w-full px-4 py-2 text-left text-xs font-semibold text-zinc-700 hover:bg-zinc-50 transition duration-150"
+                                                        :class="{ 'bg-zinc-50/50 text-zinc-500': customer.status === 'inactive' }"
+                                                    >
+                                                        <span class="h-1.5 w-1.5 rounded-full bg-zinc-400 mr-2"></span>
+                                                        Inactive
+                                                    </button>
+                                                </template>
+                                            </Dropdown>
+
                                             <button 
                                                 @click="openEditModal(customer)" 
-                                                class="p-1.5 text-zinc-400 hover:text-blue-600 hover:bg-zinc-50 rounded-lg transition duration-150 focus:outline-none"
+                                                class="p-1.5 text-black hover:bg-zinc-100 rounded-lg transition duration-150 focus:outline-none"
                                                 title="Edit Client"
                                             >
-                                                <svg class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                 </svg>
                                             </button>
                                             <button 
                                                 @click="deleteCustomer(customer.id)" 
-                                                class="p-1.5 text-zinc-400 hover:text-rose-600 hover:bg-zinc-50 rounded-lg transition duration-150 focus:outline-none"
+                                                class="p-1.5 text-black hover:bg-zinc-100 rounded-lg transition duration-150 focus:outline-none"
                                                 title="Delete Client"
                                             >
-                                                <svg class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
                                             </button>
@@ -327,7 +371,7 @@ const getInitials = (name) => {
                                 <label class="block text-[10px] font-semibold uppercase tracking-wider text-zinc-400">Profile Status</label>
                                 <select 
                                     v-model="createForm.status" 
-                                    class="mt-1.5 block w-full rounded-lg border-zinc-200 hover:border-zinc-300 focus:border-zinc-900 focus:ring-zinc-900 text-xs py-2 transition"
+                                    class="mt-1.5 block w-full rounded-lg border-zinc-300 hover:border-zinc-400 focus:border-black focus:ring-black text-xs py-2 transition"
                                 >
                                     <option value="active">Active</option>
                                     <option value="inactive">Inactive</option>
@@ -345,7 +389,7 @@ const getInitials = (name) => {
                                 <button 
                                     type="submit" 
                                     :disabled="createForm.processing" 
-                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-lg text-xs font-semibold text-white transition disabled:opacity-50"
+                                    class="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-transparent rounded-lg text-xs font-semibold text-white transition disabled:opacity-50"
                                 >
                                     {{ createForm.processing ? 'Saving...' : 'Create Client' }}
                                 </button>
@@ -428,7 +472,7 @@ const getInitials = (name) => {
                                 <label class="block text-[10px] font-semibold uppercase tracking-wider text-zinc-400">Profile Status</label>
                                 <select 
                                     v-model="editForm.status" 
-                                    class="mt-1.5 block w-full rounded-lg border-zinc-200 hover:border-zinc-300 focus:border-zinc-900 focus:ring-zinc-900 text-xs py-2 transition"
+                                    class="mt-1.5 block w-full rounded-lg border-zinc-300 hover:border-zinc-400 focus:border-black focus:ring-black text-xs py-2 transition"
                                 >
                                     <option value="active">Active</option>
                                     <option value="inactive">Inactive</option>
@@ -446,7 +490,7 @@ const getInitials = (name) => {
                                 <button 
                                     type="submit" 
                                     :disabled="editForm.processing" 
-                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-lg text-xs font-semibold text-white transition disabled:opacity-50"
+                                    class="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-transparent rounded-lg text-xs font-semibold text-white transition disabled:opacity-50"
                                 >
                                     {{ editForm.processing ? 'Updating...' : 'Save Changes' }}
                                 </button>

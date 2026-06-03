@@ -86,7 +86,7 @@ const submit = () => {
                             <label class="block text-[10px] font-semibold uppercase tracking-wider text-zinc-400">Profile Status</label>
                             <select 
                                 v-model="form.status" 
-                                class="mt-1.5 block w-full rounded-lg border-zinc-200 hover:border-zinc-300 focus:border-zinc-900 focus:ring-zinc-900 text-xs py-2 transition"
+                                class="mt-1.5 block w-full rounded-lg border-zinc-300 hover:border-zinc-400 focus:border-black focus:ring-black text-xs py-2 transition"
                             >
                                 <option value="active">Active</option>
                                 <option value="inactive">Inactive</option>
@@ -104,7 +104,7 @@ const submit = () => {
                             <button 
                                 type="submit" 
                                 :disabled="form.processing" 
-                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 border border-transparent rounded-lg text-xs font-semibold text-white transition disabled:opacity-50"
+                                class="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-transparent rounded-lg text-xs font-semibold text-white transition disabled:opacity-50"
                             >
                                 {{ form.processing ? 'Saving...' : 'Save Customer' }}
                             </button>

@@ -289,7 +289,7 @@ const formatDate = (dateStr) => {
                                         <div class="flex items-center justify-end space-x-1.5">
                                             <Link 
                                                 :href="route('proposals.edit', proposal.id)"
-                                                class="inline-flex items-center p-1.5 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg transition duration-150 focus:outline-none"
+                                                class="inline-flex items-center p-1.5 text-black hover:bg-zinc-100 rounded-lg transition duration-150 focus:outline-none"
                                                 title="Edit Proposal"
                                             >
                                                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -298,7 +298,7 @@ const formatDate = (dateStr) => {
                                             </Link>
                                             <button 
                                                 @click="deleteProposal(proposal.id)" 
-                                                class="p-1.5 text-zinc-400 hover:text-red-650 hover:bg-red-50/60 rounded-lg transition duration-150 focus:outline-none"
+                                                class="p-1.5 text-black hover:text-red-650 hover:bg-zinc-100 rounded-lg transition duration-150 focus:outline-none"
                                                 title="Delete Proposal"
                                             >
                                                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
