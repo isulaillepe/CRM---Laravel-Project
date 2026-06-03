@@ -30,7 +30,17 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $totalInvoiced = \App\Models\Invoice::sum('amount');
+    $totalPaid = \App\Models\Invoice::where('status', 'paid')->sum('amount');
+    $totalUnpaid = \App\Models\Invoice::where('status', 'unpaid')->sum('amount');
+    $totalOverdue = \App\Models\Invoice::where('status', 'overdue')->sum('amount');
+
+    return Inertia::render('Dashboard', [
+        'totalInvoiced' => $totalInvoiced,
+        'totalPaid' => $totalPaid,
+        'totalUnpaid' => $totalUnpaid,
+        'totalOverdue' => $totalOverdue,
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
