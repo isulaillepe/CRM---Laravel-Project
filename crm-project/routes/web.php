@@ -35,11 +35,18 @@ Route::get('/dashboard', function () {
     $totalUnpaid = \App\Models\Invoice::where('status', 'unpaid')->sum('amount');
     $totalOverdue = \App\Models\Invoice::where('status', 'overdue')->sum('amount');
 
+    $paidCount = \App\Models\Invoice::where('status', 'paid')->count();
+    $unpaidCount = \App\Models\Invoice::where('status', 'unpaid')->count();
+    $overdueCount = \App\Models\Invoice::where('status', 'overdue')->count();
+
     return Inertia::render('Dashboard', [
         'totalInvoiced' => $totalInvoiced,
         'totalPaid' => $totalPaid,
         'totalUnpaid' => $totalUnpaid,
         'totalOverdue' => $totalOverdue,
+        'paidCount' => $paidCount,
+        'unpaidCount' => $unpaidCount,
+        'overdueCount' => $overdueCount,
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
